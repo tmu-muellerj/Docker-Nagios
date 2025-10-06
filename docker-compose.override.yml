@@ -1,0 +1,54 @@
+---
+
+# This compose file acts as an example on using docker volumes for nagios
+# configuration. As nagios configurations are different for each site they are
+# not considered part of the container image. The best way to deal with the
+# configurations is to store them in a volume allowing the user to upgrade the
+# image without the need to extract the site configuration from the container.
+
+version: '3'
+services:
+  nagios:
+    build:
+      context: .
+      dockerfile: Dockerfile_TMU
+      platforms:
+        - linux/amd64
+      tags:
+        - ghcr.io/tmu-muellerj/nagios:v4.5.9_TMU
+    image: ghcr.io/tmu-muellerj/nagios:v4.5.9_TMU # jasonrivers/nagios:latest
+    volumes: !override
+    - nagiosetc:/opt/nagios/etc
+    - nagiosvar:/opt/nagios/var
+    - customplugins:/opt/Custom-Nagios-Plugins
+    - nagiosgraphvar:/opt/nagiosgraph/var
+    - nagiosgraphetc:/opt/nagiosgraph/etc
+    - apache2log:/var/log/apache2
+    - myCertificates:/etc/apache2/ssl
+    ports:
+        - "9080:443"
+    dns:
+      - ${DNS_SERVER1}
+      - ${DNS_SERVER2}
+    dns_search:
+      - ${DNS_SEARCH_DOMAIN}
+    environment:
+      - DNS_SERVER1=${DNS_SERVER1}
+      - DNS_SERVER2=${DNS_SERVER2}
+      - DNS_SEARCH_DOMAIN=${DNS_SEARCH_DOMAIN}
+      - OIDC_PROVIDER_METADATA_URL=${OIDC_PROVIDER_METADATA_URL}
+      - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${OIDC_CLIENT_SECRET}
+      - OIDC_REDIRECT_URI=${OIDC_REDIRECT_URI}
+      - OIDC_CRYPTO_PASSPHRASE=${OIDC_CRYPTO_PASSPHRASE}
+      - ODIC_REMOTE_USER_CLAIM=${ODIC_REMOTE_USER_CLAIM}
+
+volumes:
+    nagiosetc:
+    nagiosvar:
+    customplugins:
+    nagiosgraphvar:
+    nagiosgraphetc:
+    apache2log:
+    myCertificates:
+      external: true

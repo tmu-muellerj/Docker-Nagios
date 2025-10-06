@@ -1,0 +1,21 @@
+FROM ghcr.io/tmu-muellerj/nagios:v4.5.9
+LABEL org.opencontainers.image.authors="Jonathan Mueller <muellerj@thomasmore.edu>"
+LABEL org.opencontainers.image.url="https://github.com/tmu-muellerj/Docker-Nagios/"
+LABEL org.opencontainers.image.documentation="https://github.com/tmu-muellerj/Docker-Nagios/blob/master/README.md"
+LABEL org.opencontainers.image.source="https://github.com/tmu-muellerj/Docker-Nagios/blob/master/Dockerfile_TMU"
+LABEL org.opencontainers.image.version="v4.5.9_TMU"
+LABEL org.opencontainers.image.vendor="Thomas More University"
+
+RUN apt-get update && \
+    apt-get install -y libapache2-mod-auth-openidc && \
+    apt-get clean && \
+    rm -Rf /var/lib/apt/lists/* && \
+    a2enmod ssl && \
+    a2enmod auth_openidc
+
+ADD _overlay /
+COPY _overlay/opt/nagios/etc/cgi.cfg /opt/nagios/etc/cgi.cfg
+
+EXPOSE 443
+
+VOLUME "/etc/apache2/ssl"
