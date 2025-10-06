@@ -8,11 +8,12 @@ Nagios Core running on Ubuntu 24.04 LTS with NagiosGraph & NRPE
 
 | Product | Version |
 | ------- | ------- |
-| Nagios Core | 4.5.7 |
+| Nagios Core | 4.5.9 |
 | Nagios Plugins | 2.4.12 |
-| NRPE | 4.1.1 |
-| NCPA | 3.1.1 |
-| NSCA | 2.10.2 |
+| NRPE | 4.1.3 |
+| NCPA | 3.2.0 |
+| NSCA | 2.10.3 |
+| NSCA | 2.10.3 |
 
 ### Configurations
 Nagios Configuration lives in /opt/nagios/etc
